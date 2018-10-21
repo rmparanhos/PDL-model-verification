@@ -4,73 +4,99 @@
   (class object%
     (init id)                ; initialization argument
  
-    (define this_id id)      ; field
+    (define this-id id)      ; field
  
     (super-new)              ; superclass initialization
  
     (define/public (get-id)
-      this_id)
-    ))
+      this-id)
+
+    (define/public (print-vertex)
+      this-id)
+    
+    )
+  )
 
 (define edge%
   (class object%
-    (init label vertex_1 vertex_2)                ; initialization argument
+    (init label vertex-1 vertex-2)                ; initialization argument
  
-    (define this_label label)      ; field
-    (define this_vertex_1 vertex_1)
-    (define this_vertex_2 vertex_2)
+    (define this-label label)      ; field
+    (define this-vertex-1 vertex-1)
+    (define this-vertex-2 vertex-2)
 
     (super-new)              ; superclass initialization
  
     (define/public (get-label)
-      this_label)
-    (define/public (get-vertex_1)
-      this_vertex_1)
-    (define/public (get-vertex_2)
-      this_vertex_2)
+      this-label)
+    (define/public (get-vertex-1)
+      this-vertex-1)
+    (define/public (get-vertex-2)
+      this-vertex-2)
+
     
-    ))
+    (define/public (print-edge)
+        (print this-label)
+        (print (send this-vertex-1 print-vertex))
+        (print (send this-vertex-2 print-vertex))
+    )
+    
+  )
+)
 
 (define w%
   (class object%
-    (init vertex_l)                ; initialization argument
+    (init vertex-l)                ; initialization argument
  
-    (define this_vertex_l vertex_l)      ; field
+    (define this-vertex-l vertex-l)      ; field
  
     (super-new)              ; superclass initialization
  
-    (define/public (get-vertex_l)
-      this_vertex_l)
+    (define/public (get-vertex-l)
+      this-vertex-l)
+
+    
+    (define/public (print-vertex-l)
+      (for ([i this-vertex-l]) ; iterator binding
+         (println (send i print-vertex))) ; body
+       )
+    
     ))
 
 (define ra%
   (class object%
-    (init edge_l)                ; initialization argument
+    (init edge-l)                ; initialization argument
  
-    (define this_edge_l edge_l)      ; field
+    (define this-edge-l edge-l)      ; field
  
     (super-new)              ; superclass initialization
  
-    (define/public (get-edge_l)
-      this_edge_l)
-    ))
+    (define/public (get-edge-l)
+      this-edge-l)
+    
+    (define/public (print-edge-l)
+      (for ([i this-edge-l]) ; iterator binding
+         (println (send i print-edge))) ; body
+       )
+    )
+  )
 
-(define frame_pdl%
+(define frame-pdl%
   (class object%
     (init w ra)                ; initialization argument
  
-    (define this_w w)      ; field
-    (define this_ra ra)      ; field
+    (define this-w w)      ; field
+    (define this-ra ra)      ; field
     (super-new)              ; superclass initialization
  
     (define/public (get-w)
-      this_w)
+      this-w)
     (define/public (get-ra)
-      this_ra)
+      this-ra)
     
-    (define/public (print-graph)
-      (for ([i this_w]) ; iterator binding
-         (println (send i get-id))) ; body
+    (define/public (print-frame-pdl)
+      (send this-w print-vertex-l)
+      (send this-ra print-edge-l)
        )
     )
  )
@@ -79,12 +105,12 @@
   (class object%
     (init text)                ; initialization argument
  
-    (define this_text text)      ; field
+    (define this-text text)      ; field
 
     (super-new)              ; superclass initialization
  
     (define/public (get-text)
-      this_text)
+      this-text)
     ))
 
 
@@ -94,14 +120,19 @@
 (define u (new vertex%[id "u"]))
 (define v (new vertex%[id "v"]))
 
-(define t_v (new edge%[label "a"][vertex_1 t][vertex_2 v]))
-(define v_t (new edge%[label "a"][vertex_1 v][vertex_2 t]))
-(define s_u (new edge%[label "a"][vertex_1 s][vertex_2 u]))
-(define u_s (new edge%[label "a"][vertex_1 u][vertex_2 s]))
-(define u_v (new edge%[label "b"][vertex_1 u][vertex_2 v]))
-(define v_u (new edge%[label "b"][vertex_1 v][vertex_2 u]))
-(define s_t (new edge%[label "b"][vertex_1 s][vertex_2 t]))
-(define t_s (new edge%[label "b"][vertex_1 t][vertex_2 s]))
+(define t-v (new edge%[label "a"][vertex-1 t][vertex-2 v]))
+(define v-t (new edge%[label "a"][vertex-1 v][vertex-2 t]))
+(define s-u (new edge%[label "a"][vertex-1 s][vertex-2 u]))
+(define u-s (new edge%[label "a"][vertex-1 u][vertex-2 s]))
+(define u-v (new edge%[label "b"][vertex-1 u][vertex-2 v]))
+(define v-u (new edge%[label "b"][vertex-1 v][vertex-2 u]))
+(define s-t (new edge%[label "b"][vertex-1 s][vertex-2 t]))
+(define t-s (new edge%[label "b"][vertex-1 t][vertex-2 s]))
 
-(define f (new frame_pdl%[w (list s t u v )][ra (list t_v v_t s_u u_s u_v v_u s_t t_s)]))
-(send f print-graph)
+(define w1 (new w%[vertex-l (list s t u v)]))
+(define ra1 (new ra%[edge-l (list t-v v-t s-u u-s u-v v-u s-t t-s)]))
+;(send w1 print-vertex-l)
+;(send ra1 print-edge-l) 
+
+(define f (new frame-pdl%[w w1][ra ra1]))
+(send f print-frame-pdl)
