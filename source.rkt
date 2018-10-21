@@ -67,17 +67,41 @@
       this_w)
     (define/public (get-ra)
       this_ra)
+    
+    (define/public (print-graph)
+      (for ([i this_w]) ; iterator binding
+         (println (send i get-id))) ; body
+       )
+    )
+ )
+
+(define program%
+  (class object%
+    (init text)                ; initialization argument
+ 
+    (define this_text text)      ; field
+
+    (super-new)              ; superclass initialization
+ 
+    (define/public (get-text)
+      this_text)
     ))
 
-(define a (new vertex%[id "a"]))
+
+;pagina 113, apostila de pdl
+(define s (new vertex%[id "s"]))
+(define t (new vertex%[id "t"]))
+(define u (new vertex%[id "u"]))
 (define v (new vertex%[id "v"]))
-(send a get-id)
-(send v get-id)
 
-(define e (new edge%[label "a-v"][vertex_1 a][vertex_2 v]))
-(send e get-label)
-(send e get-vertex_1)
-(send e get-vertex_2)
+(define t_v (new edge%[label "a"][vertex_1 t][vertex_2 v]))
+(define v_t (new edge%[label "a"][vertex_1 v][vertex_2 t]))
+(define s_u (new edge%[label "a"][vertex_1 s][vertex_2 u]))
+(define u_s (new edge%[label "a"][vertex_1 u][vertex_2 s]))
+(define u_v (new edge%[label "b"][vertex_1 u][vertex_2 v]))
+(define v_u (new edge%[label "b"][vertex_1 v][vertex_2 u]))
+(define s_t (new edge%[label "b"][vertex_1 s][vertex_2 t]))
+(define t_s (new edge%[label "b"][vertex_1 t][vertex_2 s]))
 
-(define ww (new w%[vertex_l (list a v)]))
-(send ww get-vertex_l)
+(define f (new frame_pdl%[w (list s t u v )][ra (list t_v v_t s_u u_s u_v v_u s_t t_s)]))
+(send f print-graph)
